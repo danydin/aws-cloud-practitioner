@@ -1,2 +1,8 @@
 # aws-cloud-practitioner
-## cq
+## concepts:
+### subnets - 
+####
+### acl
+####
+### routes table
+####
