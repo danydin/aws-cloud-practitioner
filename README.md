@@ -1,6 +1,8 @@
 # aws-cloud-practitioner
 ## concepts - ELI5:
 
+test test
+
 ### S3 bucket & objects
 #### acl vs public bucket policy vs access point policies
 ##### ACLs: ACLs are a legacy method of controlling access to S3 resources. ACLs are attached to individual S3 objects or buckets and are used to grant or deny permissions to specific users or groups. ACLs can be used to define fine-grained access control for your S3 resources, but can be difficult to manage at scale. Bucket policies: are JSON-based documents that are attached to an S3 bucket and are used to control access to the bucket and its objects. Bucket policies can be used to grant or deny permissions to specific users, groups, or AWS accounts, and can be used to define fine-grained access control for your S3 resources. Bucket policies are more flexible and easier to manage than ACLs, and can be used to define more complex access control scenarios. Access point policies: Access point policies are JSON-based documents that are attached to an S3 access point and are used to control access to the access point and its objects. Access point policies can be used to grant or deny permissions to specific users, groups, or AWS accounts, and can be used to define fine-grained access control for your S3 resources. Access point policies are similar to bucket policies, but are attached to an access point instead of a bucket. The main difference between bucket policies and access point policies is the scope of the policy. Bucket policies apply to the entire bucket and all of its objects, while access point policies apply only to the access point and its objects. This means that access point policies can be used to define more granular access control for specific access points, while bucket policies provide broader access control for entire buckets.
@@ -59,6 +61,48 @@
 #### root user VS IAM user
 ##### In AWS, the root user is the initial user account that is created when you first create an AWS account. The root user has full access to all AWS services and resources in the account, and can perform any action on those resources. As such, it is recommended that you do not use the root user for day-to-day activities, but instead create and use IAM (Identity and Access Management) users. IAM users are separate user accounts that you can create and manage within your AWS ROOT account. IAM users have specific permissions that you can control and manage, allowing you to grant or restrict access to AWS services and resources as needed. IAM users can be assigned to groups, which can simplify the process of managing permissions for multiple users. this provides improved security (limit scope to your resources), accountability (track and audit actions taken by individual users), management (can control access of all users to every resource from one account)
 
+
 ### Q&A
-#### Q: if i create an igw and added the route table to it from the public instance do i need to open security premsision or it's already acccessible to the internet?
-#### A: If you have created an internet gateway (IGW) and added the route table to it from a public instance in your AWS VPC (Virtual Private Cloud), you may still need to configure security group rules to allow inbound traffic from the internet to your instance. Security groups: Security groups act as a virtual firewall that controls inbound and outbound traffic to your instances. By default, security groups deny all inbound traffic and allow all outbound traffic. Inbound rules: To allow inbound traffic from the internet to your instance, you must create inbound rules in your security group that allow traffic on specific ports and protocols. Outbound rules: To allow outbound traffic from your instance to the internet, you must create outbound rules in your security group that allow traffic on specific ports and protocols. Overall, while an internet gateway provides internet connectivity to instances in your VPC, you still need to configure security group rules to control access to your instances and other resources. By carefully designing your security groups and using inbound and outbound rules to control traffic, you can ensure that your resources are secure and accessible only to authorized users and applications.
+Q: If i create an igw and added the route table to it from the public instance do i need to open security premsision or it's already acccessible to the internet?
+A: If you have created an internet gateway (IGW) and added the route table to it from a public instance in your AWS VPC (Virtual Private Cloud), you may still need to configure security group rules to allow inbound traffic from the internet to your instance. 
+Security groups: Security groups act as a virtual firewall that controls inbound and outbound traffic to your instances. By default, security groups deny all inbound traffic and allow all outbound traffic. 
+Inbound rules: To allow inbound traffic from the internet to your instance, you must create inbound rules in your security group that allow traffic on specific ports and protocols. 
+Outbound rules: To allow outbound traffic from your instance to the internet, you must create outbound rules in your security group that allow traffic on specific ports and protocols. 
+Overall, while an internet gateway provides internet connectivity to instances in your VPC, you still need to configure security group rules to control access to your instances and other resources. By carefully designing your security groups and using inbound and outbound rules to control traffic, you can ensure that your resources are secure and accessible only to authorized users and applications.
+
+Q: Why do we need VPC PEERING?
+A: By default, VPCs are isolated from each other. A PVC peering connection is a networking connection between two VPCs that you can use to route traffic between them by using private ip addresses.
+
+Q: if an instance doesn't have public ipv4 does it mean it is created inside a private subnet?
+A: Not necssairly, if an EC2 instance in AWS does not have a public IPv4 address, it's possible that it was launched in a private subnet within a VPC (Virtual Private Cloud) OR the public ip hasn't been assigned yet, to assign a public ip you need to Allocate an Elastic IP address: In the AWS Management Console, navigate to the Elastic IPs page and click "Allocate new address". This will allocate a new Elastic IP address that you can use to assign to your instance. Associate the Elastic IP address with the instance: In the Elastic IPs page, select the Elastic IP address that you want to associate with your instance and click "Actions" > "Associate IP address". In the Associate Elastic IP address dialog box, select the instance that you want to associate the Elastic IP address with and click "Associate". Update the instance's security group rules: To allow inbound traffic to the instance, you must update the security group rules for the instance to allow traffic on specific ports and protocols. Note that you will also need to configure the routing tables for your VPC and subnets to allow traffic to and from the internet.
+
+Q: how do i know if the subnet is private or public?
+A: You can determine whether a subnet is public or private by checking its route table configuration.
+Navigate to the VPC console: In the AWS Management Console, navigate to the VPC console. 
+Select the subnet: Select the subnet that you want to check. 
+Check the route table: In the "Details" tab for the subnet, check the "Route table" field. This will show you the route table that is associated with the subnet. 
+Check the route table configuration: Navigate to the "Route tables" section of the VPC console and select the route table that is associated with the subnet. Check the route table configuration to see if it has a route to the internet. If the route table has a route to the internet, the subnet is a public subnet. If the route table does not have a route to the internet, the subnet is a private subnet. 
+* NOTE :In AWS VPC (Virtual Private Cloud), there is NO BUTTON OPTION to make a subnet either public or private. Whether a subnet is public or private is determined by its route table configuration, which is a logical configuration that you must set up manually.
+
+Q: Does an ec2 resides within a subnet?
+A: Yes, an ec2 resides within a subnet, subnet is a range of ip addresses in your vpc.
+
+Q: How to set a vpc peering?
+A: 1. go to both the requester and accetper vpc subnet -> route tab -> route table option. copy the local CIDR range for each of the peer subnet vpc.
+2. go to peering vpc column on the left menu and add the reqeust and accept vpc with the corresponding subnets that you copied earlier. 
+3. accept the request from the approver account (if both vpc on same aws account no need to change account)
+* peered VPCs do not necessairly accept all data between them by default. Security features, such as network access control lists and security groups, still apply. Be sure to update them accordingly as well.
+4. go to insatnces menu column -> security tab -> click on security groups option. inside inbound rules tab click edit inbound rules -> add in the type custom icmp-ipv4 and in the source the CIDR of the peered vpc subnet. if you need to add different traffic types you need to change the security group accordingly.
+* remmeber security groups are stateful which means the response for the request will be allowed to flow from the outbound reciever and into the inbound sender REGARDLESS if there are security groups rules that allows it!
+
+Q:
+A:
+
+Q:
+A:
+
+Q: 
+A:
+
+Q:
+A:
