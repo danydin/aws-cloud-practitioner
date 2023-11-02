@@ -94,6 +94,10 @@ A: 1. go to both the requester and accetper vpc subnet -> route tab -> route tab
 * failover means when rds fail (hardware issue) and there's multi az enagbled for that rds If the primary instance fails, the standby replica is automatically promoted to become the new primary instance. This process is automatic and typically takes less than a minute to complete. Once the new primary instance is promoted, the DNS record for the RDS endpoint is updated to point to the new instance. 
 * host replacement used to replace the host of an RDS instance in AWS, you can create a new instance, create a read replica, promote the read replica to become the new primary instance, test the new instance, and delete the original instance. You should consider using host replacement for an RDS instance in AWS when there is a hardware failure, performance issues, or when you need to upgrade the database engine or operating system. Host replacement can take several hours, so you should plan accordingly and communicate any downtime or service disruptions to your users or customers.
 
+## DynamoDB (NOSql)
+DynamoDB is one of the nosql servers avilable in aws. when creating a db in dynamo db you must specify the partiton key and optional a second required key called a sort key. the partition key ensures that each item-attribute has a unique value (e.g. userId). if you use both of the primary keys (partition and sort key) you can have same value for multiple partition keys as long as the value for each sort key is different, this is called composite key. to query in a dynamodb table you have to use the instance id value and optional the sort key value to further refine your query results.
+
+## EFS (elastic file system)
 
 Q: are all subnets in a vpc must share the same route table , security groups and acl?
 A: In Amazon Web Services (AWS), all subnets within a Virtual Private Cloud (VPC) share the same route table, but they can have different security groups and network access control lists (ACLs).
@@ -118,6 +122,14 @@ Q: sql vs nosql
 A: SQL databases, also known as relational databases, are based on the Structured Query Language (SQL) and use a table-based data model. SQL databases are ideal for applications that require complex queries and transactions, such as financial applications or e-commerce websites. SQL databases are also highly scalable and can handle large amounts of data.
 NoSQL databases, on the other hand, are non-relational databases that use a variety of data models, such as key-value, document, or graph. NoSQL databases are ideal for applications that require high scalability and performance, such as real-time analytics or social media platforms. NoSQL databases are also highly flexible and can handle unstructured or semi-structured data.
 It is also possible to use a combination of SQL and NoSQL databases in the same application to takeadvantage of the strengths of each.
-Q: Explain schema in sql and nosql
+Q: Explain schema & schemaless in sql and nosql
 A: a schema is a logical container for database objects, such as tables, views, indexes, and procedures. A schema defines the structure of the database and the relationships between the objects.
-In NoSQL databases, a schema is typically more flexible and dynamic, where there are required "primrary keys & values" which applied to all fields and then a flexible different amount of attribues added to the primrary key-values depends on the sepcific client that was added to the db, this is called a flexible schema as there's are different fileds for different clients in the db.
+On the other hand schemaless like in nosql dynamodb you can create any table with as many attributes as you like for each item in the table. you can also add new fields anytime even after the table or item has been created. this is called a flexible schema / schemaless as you can always change your app items db' WITHOUT redfine the table schema as would be required in relational databases.
+Q: what operation gets a specific item from the DynamoDB table and what are the required fiels? 
+A: GetItem operation get a specific item field from the DynamoDB table and you must specify the primary keys-values for the client/item that you want to retrieve. you can retrieve all the fields or apple a condition to retrivte just a subset of its atributes.
+Q: explain serverless
+A: serverless refers to a model where the cloud provider manages the infrastructure and automatically scales resources based on demand. In a serverless model, the cloud provider takes care of the underlying infrastructure, such as servers, operating systems, updates and network resources, and provides a platform for developers to build and deploy applications without worrying about the underlying infrastructure, where you can scale up or down your app resouces, pay per what you use only and focus on the code without managing the infrastrcture as well.
+Q: what MANAGED mean in aws managed nosql db?
+A: a managed NoSQL database refers to a database service that is fully managed by AWS. This means that AWS takes care of the underlying infrastructure, such as servers, storage, and networking.
+Q: map vs list in dynamodb attributes
+A: Maps are useful for storing structured data that can be accessed by a UNIQUE key in the map (key: value, key2: value), while lists are useful for storing unstructured data that can be accessed by position (list[0],list[1] etc).
