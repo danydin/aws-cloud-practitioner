@@ -144,8 +144,34 @@ Q: What's cache and how is it useful in databases, servers and websites to impro
 A: cache refers to a high-speed data storage layer that is used to temporarily store frequently accessed data. Caching is a technique used to improve the performance of databases, servers, and websites by reducing the amount of time it takes to access data. caching can be used to store frequently accessed data in memory, which rdeuce the need to read from disk / memory. 
 
 Q: explain mount targets
-A:
+A: EFS uses mount targets to provide access to the file system from EC2 instances. A mount target is a network interface that is used to mount an EFS file system to an EC2 instance. Each mount target is associated with a specific subnet in a VPC, and can be accessed by EC2 instances that are in the same subnet. When an EC2 instance mounts an EFS file system, it creates a connection to the mount target using the mount target's IP address. This connection allows the EC2 instance to access the file system as if it were a local file system. Mount targets are important for providing access to EFS file systems from EC2 instances, as they allow the file system to be mounted and accessed over the network. Without mount targets, it would not be possible to access an EFS file system from an EC2 instance. It is important to note that EFS supports multiple mount targets for each file system, which allows for high availability and scalability. By creating multiple mount targets in different subnets, you can ensure that the file system is accessible even if one of the subnets or mount targets becomes unavailable.
 
+Q: what efs used for?
+A: EFS is used for a variety of use cases, such as: 
+Content management: EFS can be used to store and manage content, such as images, videos, and documents, for use in web applications or other types of content management systems.
+Big data analytics: EFS can be used to store and process large amounts of data for use in big data analytics applications, such as Hadoop or Spark.
+Application development: EFS can be used to store and share code and other development assets across multiple EC2 instances, making it easier to develop and deploy applications.
+Media processing: EFS can be used to store and process media files, such as audio and video, for use in media processing applications, such as transcoding or streaming.
+Backup and disaster recovery: EFS can be used as a backup and disaster recovery solution, providing a scalable and highly available storage solution for critical data.
+
+Q: explain ecs and lambada
+A: Amazon ECS is a fully managed container orchestration service that allows you to run and manage Docker containers on a cluster of EC2 instances. ECS provides a scalable and highly available platform for deploying and managing containerized applications. With ECS, you can easily deploy and manage containerized applications, and scale them up or down as needed to meet changing demands.
+AWS Lambda, on the other hand, is a serverless computing service that allows you to run code without provisioning or managing servers. With Lambda, you can write code in a variety of programming languages, and the service will automatically run and scale the code in response to events, such as changes to data in an S3 bucket or a new message in an Amazon Simple Notification Service (SNS) topic.
+
+
+Q: when and for what docker containers are useful for
+A: Docker containers are useful for a variety of use cases, including application deployment, microservices architecture, DevOps, hybrid cloud, and big data. Docker containers provide several benefits, including portability, scalability, consistency, and efficiency. Portability: Docker containers can be easily moved between environments, making it easy to deploy applications across different infrastructure and cloud providers.
+Scalability: Docker containers can be easily scaled up or down to meet changing demands, making it easy to handle spikes in traffic or demand.
+Consistency: Docker containers provide a consistent and reproducible environment for building, testing, and deploying applications, which can help to reduce errors and improve reliability.
+Efficiency: Docker containers are lightweight and use fewer resources than traditional virtual machines, which can help to reduce costs and improve performance.
+
+Q: what is the purpose of mounting efs to ec2 / lambada / ecs
+A: Shared storage: Mounting EFS to EC2, Lambda, or ECS allows multiple instances or functions to access the same file system, providing a shared storage solution for applications.
+Scalability: EFS is designed to be highly scalable, allowing you to easily scale up or down as needed to meet changing demands. By mounting EFS to EC2, Lambda, or ECS, you can ensure that your application has access to scalable and highly available storage.
+
+Q: do i need the same underlying os when running a docker image across multiple env ?
+A: No, you do not need the same underlying operating system to run a Docker image across multiple environments. Docker containers are designed to be portable and can run on any system that supports Docker. Docker containers are isolated from the underlying operating system and include all of the dependencies and libraries required to run the application. This means that you can create a Docker image on one system and run it on another system with a different operating system, as long as both systems support Docker.
+* However there may be differences in the way that the application interacts with the file system or network on different operating systems. Therefore always ensure that your Docker image runs correctly across multiple environments by testing the image on each environment to ensure that it behaves as expected. You may also need to make adjustments to the Docker image or application to account for any differences in the underlying operating system.
 
 
 
