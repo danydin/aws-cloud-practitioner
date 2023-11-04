@@ -154,10 +154,30 @@ Application development: EFS can be used to store and share code and other devel
 Media processing: EFS can be used to store and process media files, such as audio and video, for use in media processing applications, such as transcoding or streaming.
 Backup and disaster recovery: EFS can be used as a backup and disaster recovery solution, providing a scalable and highly available storage solution for critical data.
 
+Q: explain ENI & how to create one
+A: eni is a logical netowrking component in a vpc that represents a virtual network card. the eni atuomatically receives an ip address from the vpc. after creating an efi, you can mount the efs on instances in that subnet.
+To create an elastic network interface you write efs in search bar then choose the network tab of your desired efs. choose the subnet and a security group (usually all eni will use to the same secuity group) that the eni will be attached to. eni will be installed automatically in that subnet specified above.
+
+Q: how to mount efs to an ec2 instance?
+A: connect to the instance via ssh or session manager write:
+sudo -i 
+sudo yum install -y amazon-efs-utils
+now you create a data directory, mount your Amazon EFS file system to the data directory, add entries to the existing log file, and view them by:
+cd ~/
+mkdir data
+ls 
+paste the sudo mount command that you copied from the Amazon EFS console in an earlier step. At the end of the command, replace the "efs" folder name with "data" (without quotes) and press Enter
+cd data
+sudo bash -c "cat >> efs-1-setup.log"
+this is an ec2 in az B
+cat efs-1-setup.log
+You have successfully mounted an Amazon EFS file system to two Amazon EC2 instance
+* can use amazon ec2 user data (optional meta data setting) to attach files systems to new instances everytime they lunch by pasting this code inside the user data
+
+
 Q: explain ecs and lambada
 A: Amazon ECS is a fully managed container orchestration service that allows you to run and manage Docker containers on a cluster of EC2 instances. ECS provides a scalable and highly available platform for deploying and managing containerized applications. With ECS, you can easily deploy and manage containerized applications, and scale them up or down as needed to meet changing demands.
 AWS Lambda, on the other hand, is a serverless computing service that allows you to run code without provisioning or managing servers. With Lambda, you can write code in a variety of programming languages, and the service will automatically run and scale the code in response to events, such as changes to data in an S3 bucket or a new message in an Amazon Simple Notification Service (SNS) topic.
-
 
 Q: when and for what docker containers are useful for
 A: Docker containers are useful for a variety of use cases, including application deployment, microservices architecture, DevOps, hybrid cloud, and big data. Docker containers provide several benefits, including portability, scalability, consistency, and efficiency. Portability: Docker containers can be easily moved between environments, making it easy to deploy applications across different infrastructure and cloud providers.
