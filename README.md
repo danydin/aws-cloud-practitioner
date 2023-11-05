@@ -172,7 +172,7 @@ sudo bash -c "cat >> efs-1-setup.log"
 this is an ec2 in az B
 cat efs-1-setup.log
 You have successfully mounted an Amazon EFS file system to two Amazon EC2 instance
-* can use amazon ec2 user data (optional meta data setting) to attach files systems to new instances everytime they lunch by pasting this code inside the user data
+* can use amazon ec2 user data (optional meta data setting) to attach files systems to new instances everytime they lunch by pasting this code inside the user data 
 
 
 Q: explain ecs and lambada
