@@ -134,8 +134,10 @@ A: Maps are useful for storing structured data that can be accessed by a UNIQUE 
 Q: what's the purpose of efs?
 A: efs used to provides a serverless (no infrastrcutre setup / maintainance) elastic (scale up/down automatically according to your files size) file system that you can use to share files data without provisioning or managing storage.
 
-Q: How to configure efs with multiple ec2?
-A: 1. efs file systems require an inbouns NFS rule (in security groups). in the SOURCE (in the inboung rules of security groups) if you choose a security group it will give any ec2 instances linked to that security group will have NFS client acccess to the shared file system.
+Q: How to configure efs?
+A: 1. efs file systems require an inbouns NFS rule in the security group of each ec2 instance. to configure it inside the securtiy groups inside ec2 / vpc go to inbound rules tab and choose type: "nfs", source: "the security group you attach to your ec2 instances" this will give any ec2 instance that attached to that security group an acccess to the shared file system you'll create and attach in the next steps.
+2.
+3.
 
 Q: what mount targets do in efs?
 A: mount targets in Amazon EFS provide access to the file system from EC2 instances by creating a network interface that can be used to mount the file system. Mount targets are associated with a specific subnet in a VPC and can be accessed by EC2 instances that are in the same subnet. When an EC2 instance mounts an EFS file system, it creates a connection to the mount target using the mount target's IP address. This connection allows the EC2 instance to access the file system as if it were a local file system, Mount targets are important for providing access to EFS file systems from EC2 instances, as they allow the file system to be mounted and accessed over the network. Without mount targets, it would not be possible to access an EFS file system from an EC2 instance. EFS supports multiple mount targets for each file system, which allows for high availability and scalability. By creating multiple mount targets in different subnets, you can ensure that the file system is accessible even if one of the subnets or mount targets becomes unavailable.
