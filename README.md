@@ -1,20 +1,33 @@
 # aws-cloud-practitioner
 
 ## S3 bucket & objects
-acl vs public bucket policy vs access point policies
-ACLs: ACLs are a legacy method of controlling access to S3 resources. ACLs are attached to individual S3 objects or buckets and are used to grant or deny permissions to specific users or groups. ACLs can be used to define fine-grained access control for your S3 resources, but can be difficult to manage at scale. Bucket policies: are JSON-based documents that are attached to an S3 bucket and are used to control access to the bucket and its objects. Bucket policies can be used to grant or deny permissions to specific users, groups, or AWS accounts, and can be used to define fine-grained access control for your S3 resources. Bucket policies are more flexible and easier to manage than ACLs, and can be used to define more complex access control scenarios. Access point policies: Access point policies are JSON-based documents that are attached to an S3 access point and are used to control access to the access point and its objects. Access point policies can be used to grant or deny permissions to specific users, groups, or AWS accounts, and can be used to define fine-grained access control for your S3 resources. Access point policies are similar to bucket policies, but are attached to an access point instead of a bucket. The main difference between bucket policies and access point policies is the scope of the policy. Bucket policies apply to the entire bucket and all of its objects, while access point policies apply only to the access point and its objects. This means that access point policies can be used to define more granular access control for specific access points, while bucket policies provide broader access control for entire buckets.
-bucket policy vs user policy vs arn
-In AWS S3, bucket policies and user policies are two types of policies that are used to control access to S3 resources. ARN (Amazon Resource Name) is a unique identifier for an AWS resource, such as an S3 bucket or object. ARNs are used to specify the resource to which the policy applies. Bucket policies are attached to an S3 bucket and are used to control access to the bucket and its objects. user policies on the other hand are attached to an IAM user or group and are used to control access to specific S3 resources, by going to IAM dashboard in the aws search console you can create an IAM USER OR GROUP and attach one or more policies to the user or group. User policies are attached to individual IAM users, while group policies are attached to IAM groups, depends on what you defined and configured at IAM DASHBOARD.
-object writer
-object writer is a user or application that has permission to write objects to an S3 bucket. An object writer can upload new objects to an S3 bucket, modify existing objects, or delete objects from the bucket. you edit the premissio under the bucket premission tab then choose bucket policy -> edit and enter a json format policy to grant premission by specifcing the user arn id and specify what is allowed to edit, add, remove etc. Object write permission can be granted using S3 bucket policies or IAM policies, allowing you to control access to your S3 resources and improve security.
-sse-s3 encryption
-(Server-Side Encryption with S3-Managed Keys) is a feature that provides encryption of S3 objects at rest. SSE-S3 automatically encrypts objects when they are stored in S3, and decrypts them when they are retrieved. When SSE-S3 is enabled, S3 uses 256-bit Advanced Encryption Standard (AES-256) encryption to encrypt objects. The encryption keys are managed by S3, and are stored separately from the objects themselves. This provides an additional layer of security for your S3 objects, as it ensures that the encryption keys are not accessible to unauthorized users. With SSE-S3 enabled, all objects that are uploaded to the bucket will be automatically encrypted with AES-256 encryption. When objects are retrieved, S3 automatically decrypts them using the encryption keys that are managed by S3. It's worth noting that there are other methods of encrypting S3 objects, such as SSE-KMS (Server-Side Encryption with AWS KMS-Managed Keys) and SSE-C (Server-Side Encryption with Customer-Provided Keys). These methods provide more granular control over encryption keys and can be used in conjunction with SSE-S3 to provide comprehensive encryption of S3 objects. the encryption is used at "REST" only which means it protects against unauthorized access or data breaches to the PHYSICAL storage device, such as a hard drive or solid-state drive ONLY.
-bucket key - enabled
-bucket key enabled is a feature that allows you to use AWS KMS (Key Management Service) to manage the encryption keys for your S3 objects. When bucket key enabled is enabled, S3 generates a unique data key for each object that is stored in the bucket, and then encrypts the data key using a KMS customer master key (CMK) that the aws user provided when choosing to enable this option. Bucket key enabled can be used in conjunction with SSE-S3 (Server-Side Encryption with S3-Managed Keys) to provide additional encryption of S3 objects. When both bucket key enabled and SSE-S3 are enabled, S3 uses a unique data key for each object that is stored in the bucket, and encrypts the data key using a KMS customer master key (CMK). The data itself is also encrypted using SSE-S3.
-s3 static website hosting
-S3, static website hosting is a feature that allows you to host static websites directly from an S3 bucket. Static websites are websites that consist of HTML, CSS, JavaScript, and other static files, and do not require server-side processing or dynamic content. With static website hosting enabled, your S3 bucket will be configured to serve your static website files as a website. You can access your website using the endpoint URL that is provided in the "Static website hosting" section of the bucket properties.  If your website requires server-side processing or dynamic content, you may need to use a different hosting solution, such as Amazon EC2 or AWS Elastic Beanstalk. Overall, static website hosting in AWS S3 is a simple and cost-effective way to host static websites directly from an S3 bucket. It's easy to set up and can be used for a variety of use cases, such as personal websites, blogs, and small business websites. S3 simply serves the static website files directly from the bucket, using the bucket like a webserver by indicating the default index.html and error.html that the user provided as the entry point for the url that aws provides.
-s3 virtual hosted style url vs a path style url
-In AWS S3, there are two types of URLs that can be used to access S3 objects: virtual hosted style URLs and path style URLs. Virtual hosted style URLs are URLs that use the BUCKET NAME as part of the domain name in the URL. For example, a virtual hosted style URL for an S3 object might look like this: http://mybucket.s3.amazonaws.com/myobject - Path style URLs, on the other hand, are URLs that use the bucket name as part of the PATH in the URL. For example, a path style URL for the same S3 object might look like this: http://s3.amazonaws.com/mybucket/myobject - Virtual hosted style URLs are generally preferred over path style URLs, as they provide better performance and scalability. Virtual hosted style URLs allow S3 to distribute requests across multiple servers, which can improve performance and reduce latency. Path style URLs, on the other hand, require S3 to route all requests through a single server, which can limit performance and scalability.
+Q: acl vs public bucket policy vs access point policies
+A: ACL (Access Control List), Public Bucket Policy, and Access Point Policies are different mechanisms in AWS S3 (Simple Storage Service) that allow you to control access to your S3 buckets and objects. Here's a brief explanation of each:
+ACL (Access Control List): ACLs are a legacy method of managing access to S3 buckets and objects. With ACLs, you can grant permissions to individual AWS accounts or predefined groups (e.g., authenticated users, all users) at the bucket or object level. ACLs provide basic control over access but can become complex to manage as the number of users and resources increases.
+Public Bucket Policy: A Public Bucket Policy is a JSON-based policy that allows you to define permissions for your S3 bucket and its objects. It provides more granular control than ACLs and allows you to specify rules for different types of access (e.g., read, write, list) to specific IP addresses, AWS accounts, or even anonymous users. Public Bucket Policies are commonly used to make specific buckets or objects publicly accessible.
+Access Point Policies: Access Points are a feature in S3 that allow you to create unique entry points for accessing your bucket. Access Point Policies are JSON-based policies that are attached to an access point. They provide fine-grained control over access to the objects within the access point. Access Point Policies allow you to define permissions for specific AWS accounts or IAM roles, and you can also specify conditions for access (e.g., time-based access, IP address restrictions).
+In summary, ACLs, Public Bucket Policies, and Access Point Policies are different mechanisms for controlling access to S3 buckets and objects. ACLs are a legacy method, while Public Bucket Policies and Access Point Policies provide more granular control and flexibility. Public Bucket Policies are used to make buckets or objects publicly accessible, while Access Point Policies are used to control access to objects through access points. It's recommended to use Public Bucket Policies or Access Point Policies for managing access to S3 resources, as they offer more advanced features and are easier to manage than ACLs.
+
+Q: Explain Bucket Policy
+A: A bucket policy attached directly to an S3 bucket in the s3 console.
+It is a resource-based policy that allows you to define permissions for the bucket and its objects.
+Bucket policies are written in JSON format.
+Bucket policies are used to control access to the entire bucket or specific objects within the bucket.
+You can grant permissions to AWS accounts, IAM users, IAM roles, or even anonymous users.
+Bucket policies are commonly used to make buckets or objects publicly accessible, define cross-account access, or enforce specific access controls for the bucket.
+
+Q: What's object writer
+A: an object writer in the context of AWS S3 refers to the entity or component responsible for writing or uploading objects to an S3 bucket. It can be a person using the AWS Management Console, a user executing AWS CLI commands, an application using AWS SDKs, or a third-party tool or library.
+
+Q: explain sse-s3 encryption & bucket key
+A: SSE-S3 (Server-Side Encryption with S3) is a feature provided by AWS S3 (Simple Storage Service) that allows you to encrypt your data at rest in S3 buckets. When you enable SSE-S3 encryption, AWS automatically encrypts your objects before storing them in S3 and decrypts them when you retrieve them. at "REST" means it encrypt the data against unauthorized access / data breaches to the PHYSICAL storage device e.g. the solid-state drive.
+Enabling SSE-S3 with a bucket key provides an additional layer of security by allowing you to use your own encryption key to protect your data in S3. It gives you more control over the encryption process and ensures that only you have access to the key used for encryption and decryption.
+
+Q: s3 static website hosting
+A: S3, static website hosting is a feature that allows you to host static websites directly from an S3 bucket. Static websites are websites that consist of HTML, CSS, JavaScript, and other static files, and do not require server-side processing or dynamic content. With static website hosting enabled, your S3 bucket will be configured to serve your static website files as a website. You can access your website using the endpoint URL that is provided in the "Static website hosting" section of the bucket properties.  If your website requires server-side processing or dynamic content, you may need to use a different hosting solution, such as Amazon EC2 or AWS Elastic Beanstalk. Overall, static website hosting in AWS S3 is a simple and cost-effective way to host static websites directly from an S3 bucket. It's easy to set up and can be used for a variety of use cases, such as personal websites, blogs, and small business websites. S3 simply serves the static website files directly from the bucket, using the bucket like a webserver by indicating the default index.html and error.html that the user provided as the entry point for the url that aws provides.
+
+Q: s3 virtual hosted style url vs a path style url
+A: In AWS S3, there are two types of URLs that can be used to access S3 objects: virtual hosted style URLs and path style URLs. Virtual hosted style URLs are URLs that use the BUCKET NAME as part of the domain name in the URL. For example, a virtual hosted style URL for an S3 object might look like this: http://mybucket.s3.amazonaws.com/myobject - Path style URLs, on the other hand, are URLs that use the bucket name as part of the PATH in the URL. For example, a path style URL for the same S3 object might look like this: http://s3.amazonaws.com/mybucket/myobject - Virtual hosted style URLs are generally preferred over path style URLs, as they provide better performance and scalability. Virtual hosted style URLs allow S3 to distribute requests across multiple servers, which can improve performance and reduce latency. Path style URLs, on the other hand, require S3 to route all requests through a single server, which can limit performance and scalability.
 
 ## ec2 (elastic compute cloud) & VPC
 Q: What are the uses of ec2
@@ -245,10 +258,41 @@ Together, Auto Scaling and Load Balancing can help you build highly available, f
 Q: What's auto scaling group
 A: 
 
+Q: how come that i send a load balancer traffic in ec2 to a public subnet but in the auto scaling group i configure to create only private subnet instances and it still connects just fine to the instances via the web?
+A: In AWS, when you configure a load balancer to send traffic to instances in a public subnet, it is still possible to have the instances themselves located in private subnets. This is achieved through the use of Network Address Translation (NAT) gateways or NAT instances.
+Here's how it works:
+Load Balancer in a Public Subnet: The load balancer is placed in a public subnet, which has a route table associated with it that has an internet gateway attached. This allows the load balancer to have a public IP address and be accessible from the internet.
+Instances in Private Subnets: The instances that the load balancer routes traffic to can be located in private subnets. Private subnets do not have a direct internet gateway attached, so they are not directly accessible from the internet.
+Network Address Translation (NAT): To allow the instances in the private subnets to communicate with the internet, you can use a NAT gateway or a NAT instance. The NAT gateway/instance acts as an intermediary between the private instances and the internet. It translates the private IP addresses of the instances to a public IP address, allowing them to communicate with the internet.
+Routing: The route tables associated with the private subnets are configured to route outbound traffic to the NAT gateway/instance. This ensures that the instances can send traffic to the internet through the NAT gateway/instance.
+When the load balancer receives traffic from the internet, it routes the traffic to the instances in the private subnets. The instances respond to the traffic, and the response is sent back to the load balancer through the NAT gateway/instance. The load balancer then forwards the response back to the client.
+This setup allows you to have a secure architecture where your instances are located in private subnets, while still being able to receive traffic from the internet through the load balancer.
+It's important to note that the instances in the private subnets do not have direct public IP addresses. They communicate with the internet through the NAT gateway/instance, which handles the translation of IP addresses.
+
 * if you termiante an instance within an auto scaling group, which resutls in loweering the number of running instances below the auto scaling minimum requierment, a new isntance is launched autoamtically.
 * to take advtange of the safety and reliability of geographic redundancy, span your auto scaling group accross multiple AZ and attach a load balacner to distribute incoming traffic across those az.
 * by creating security group that allow inbound traffic from the internet to the load balancer and outbound to the security group of the webservers (and configure inbound traffic in the webservers to only allow load balancer traffic) you can run the instances in a private subnets inside the auto scaling group and they will still be accessible via the load balancer to the internet.
 
+
+## IAM (Identity and access management)
+Q: What's object reference
+A: an object reference refers to a way of identifying and granting permissions to AWS resources or actions. IAM uses Amazon Resource Names (ARNs) as object references to uniquely identify resources within AWS.
+An ARN is a string that follows a specific format and includes information about the AWS account, the resource type, and the resource name. It provides a standardized way to reference and manage resources across AWS services.
+For example, an ARN for an IAM user might look like this:
+arn:aws:iam::123456789012:user/my-iam-user
+In this ARN, "123456789012" represents the AWS account ID, and "my-iam-user" is the name of the IAM user.
+Object references are used in IAM policies to specify the resources or actions to which the policy applies. IAM policies define permissions and access control rules for users, groups, or roles within an AWS account. By referencing specific ARNs in IAM policies, you can grant or deny permissions to specific resources or actions.
+For example, a policy statement might include an object reference to allow a specific IAM user to access an S3 bucket:
+{
+  "Effect": "Allow",
+  "Action": "s3:GetObject",
+  "Resource": "arn:aws:s3:::my-bucket/*",
+  "Principal": {
+    "AWS": "arn:aws:iam::123456789012:user/my-iam-user"
+  }
+}
+In this policy statement, the "Resource" field specifies the ARN of the S3 bucket, and the "Principal" field specifies the ARN of the IAM user.
+By using object references in IAM policies, you can control access to AWS resources and actions based on specific identities or resource ARNs, providing granular control over permissions within your AWS environment.
 
 Q: explain serverless
 A: serverless refers to a model where the cloud provider manages the infrastructure and automatically scales resources based on demand. In a serverless model, the cloud provider takes care of the underlying infrastructure, such as servers, operating systems, updates and network resources, and provides a platform for developers to build and deploy applications without worrying about the underlying infrastructure, where you can scale up or down your app resouces, pay per what you use only and focus on the code without managing the infrastrcture as well.
@@ -279,3 +323,46 @@ Instance store volumes are ideal for temporary data that does not need to be per
 Amazon Glacier: Amazon Glacier is a low-cost, highly durable, and secure cloud-based storage service provided by AWS. Glacier can be used to store and archive data that is infrequently accessed, such as backups or archives
 AWS Storage Gateway: AWS Storage Gateway is a hybrid cloud storage service provided by AWS that enables on-premises applications to use cloud storage. Storage Gateway can be used to connect on-premises storage systems to AWS storage services, such as S3 or EBS.
 Each storage option has its own unique features and use cases, and can be used to meet different storage requirements for EC2 instances.
+
+Q: aws cli vs aws sdk
+A: AWS CLI:
+The AWS CLI is a unified tool that provides a consistent interface for interacting with all parts of AWS.
+It's a command-line tool for managing AWS services. With just one tool to download and configure, you can control multiple AWS services from the command line and automate them through scripts.
+It's primarily used for administrative tasks, such as managing resources in AWS, deploying applications, and automating manual tasks.
+It's ideal for scripting, automation, and for those who prefer a command-line interface.
+It's written in Python and can be used on Windows, macOS, and Linux.
+To connect to AWS via the AWS CLI (Command Line Interface), you need to install the CLI and configure it with your AWS credentials. Here are the steps:
+Step 1: Install AWS CLI
+The AWS CLI is supported on Windows, macOS, and Linux. The installation depends on your operating system. Here's how to install it on each:
+Windows: Download the installer from the AWS CLI website and run it.
+macOS and Linux: You can install the AWS CLI using pip, which is a package manager for Python. Run the following command:
+pip install awscli --upgrade --user
+Step 2: Configure AWS CLI
+After installing the AWS CLI, you need to configure it with your AWS credentials. You can do this by running the aws configure command:
+aws configure
+You'll be prompted to enter your Access Key ID, Secret Access Key, Default region name, and Default output format. Here's what each of these means:
+AWS Access Key ID and AWS Secret Access Key: These are your AWS credentials, which you can get from the AWS Management Console. If you don't have these, you'll need to create a new IAM user with programmatic access, and AWS will generate a new set of keys for you.
+Default region name: This is the name of the AWS region that you want to send your requests to by default. You can find a list of available regions in the AWS documentation.
+Default output format: This specifies how the results are formatted. The options are json, yaml, text, and table. If you're not sure which one to choose, json is a good default.
+After you've entered these details, your AWS CLI is set up and ready to use. You can start running commands to interact with AWS services. For example, to list all your S3 buckets, you can run:
+aws s3 ls
+AWS SDK:
+AWS SDKs are language-specific APIs for AWS services. They are available in several programming languages such as Java, .NET, Node.js, Python (boto3), Go, Ruby, PHP, etc.
+They are used to build applications with increased flexibility, reliability, and scalability.
+They provide native features and take the complexity out of coding by providing AWS service-specific APIs.
+They are ideal for developers building applications that use AWS services.
+They handle low-level details such as authentication, retry logic, and error handling.
+In summary, if you're a developer building an application that interacts with AWS services, you'd typically use the AWS SDK. If you're an administrator or DevOps engineer who needs to manage AWS resources, automate tasks, or quickly prototype something, you'd typically use the AWS CLI.
+AWS SDKs are language-specific APIs for AWS services. They simplify the process of integrating your application, library, or script with AWS services like Amazon S3, Amazon EC2, Amazon DynamoDB, etc. AWS SDKs handle low-level details such as authentication, retry logic, and error handling.
+To use an AWS SDK:
+Choose the SDK that corresponds to the language you're using. AWS provides SDKs for several programming languages including Python (Boto3), JavaScript, Java, .NET, PHP, Go, Ruby, etc. aws.amazon.com, aws.amazon.com, aws.amazon.com.
+Install the SDK. For example, to install Boto3 for Python, you can use pip:
+pip install boto3
+Configure your credentials. You can do this by setting your AWS access key ID and secret access key as environment variables:
+export AWS_ACCESS_KEY_ID='your_access_key'
+export AWS_SECRET_ACCESS_KEY='your_secret_key'
+In your code, import the AWS SDK and use it to interact with AWS services. Here's a simple example using Boto3 to list all your S3 buckets:
+import boto3
+s3 = boto3.resource('s3')
+for bucket in s3.buckets.all():
+    print(bucket.name)
